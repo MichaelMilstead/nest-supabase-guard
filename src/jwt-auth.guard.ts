@@ -41,20 +41,18 @@ export class JWTAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user = await this.authenticateRequest(request);
-    request.user = user;
+    request.supabaseUser = user;
     return true;
   }
 
   private async authenticateRequest(request: any): Promise<User> {
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      this.logger.error(`No token provided`);
       throw new UnauthorizedException(`No token provided`);
     }
 
     const user = await this.getUserFromJWT(token);
     if (!user) {
-      this.logger.error(`Invalid token: ${token}`);
       throw new UnauthorizedException(`Invalid token`);
     }
 
