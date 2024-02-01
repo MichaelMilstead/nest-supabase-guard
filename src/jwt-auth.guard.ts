@@ -41,7 +41,7 @@ export class JWTAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user = await this.authenticateRequest(request);
-    request.supabaseUser = user;
+    request.authUser = user;
     return true;
   }
 
