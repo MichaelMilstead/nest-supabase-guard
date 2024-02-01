@@ -16,12 +16,11 @@ export class JWTAuthGuard implements CanActivate {
   private readonly logger = new Logger(JWTAuthGuard.name);
 
   constructor(@Optional() @Inject("SUPABASE_CLIENT") client?: SupabaseClient) {
-    this.logger.debug(client);
     this.supabaseClient = client || this.initializeSupabaseClient();
   }
 
   private initializeSupabaseClient(): SupabaseClient {
-    this.logger.debug("Supabase auth guard initializing new Supabase client");
+    this.logger.debug("Supabase auth guard initializing new Supabase client.");
     if (!process.env.SUPABASE_URL) {
       throw new Error(
         "Supabase Auth environment variable: SUPABASE_URL is not set."
