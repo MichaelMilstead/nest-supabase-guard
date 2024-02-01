@@ -1,6 +1,6 @@
 {
   "name": "nest-supabase-guard",
-  "version": "0.0.3",
+  "version": "0.0.9",
   "description": "Auth guard for NestJS using supabase",
   "main": "dist/index.js",
   "scripts": {

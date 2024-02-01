@@ -1,18 +1,27 @@
 import {
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
   Logger,
+  Optional,
   UnauthorizedException,
 } from "@nestjs/common";
-import { User, createClient } from "@supabase/supabase-js";
+import { SupabaseClient, User, createClient } from "@supabase/supabase-js";
 import { Request } from "express";
 
 @Injectable()
 export class JWTAuthGuard implements CanActivate {
-  supabase;
+  supabaseClient;
   private readonly logger = new Logger(JWTAuthGuard.name);
-  constructor() {
+
+  constructor(@Optional() @Inject("SUPABASE_CLIENT") client?: SupabaseClient) {
+    this.logger.debug(client);
+    this.supabaseClient = client || this.initializeSupabaseClient();
+  }
+
+  private initializeSupabaseClient(): SupabaseClient {
+    this.logger.debug("Supabase auth guard initializing new Supabase client");
     if (!process.env.SUPABASE_URL) {
       throw new Error(
         "Supabase Auth environment variable: SUPABASE_URL is not set."
@@ -23,7 +32,8 @@ export class JWTAuthGuard implements CanActivate {
         "Supabase Auth environment variable: SUPABASE_ANON_KEY is not set."
       );
     }
-    this.supabase = createClient(
+
+    return createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_ANON_KEY
     );
@@ -58,7 +68,7 @@ export class JWTAuthGuard implements CanActivate {
   }
 
   async getUserFromJWT(token: string): Promise<User> {
-    const response = await this.supabase.auth.getUser(token);
+    const response = await this.supabaseClient.auth.getUser(token);
     if (!response.data.user) {
       throw new Error("User not found in Supabase for the given token");
     }
