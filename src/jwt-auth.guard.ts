@@ -4,6 +4,7 @@ import {
   Injectable,
   Logger,
 } from "@nestjs/common";
+import { SupabaseTokenService } from "./supabase-token.service";
 
 @Injectable()
 export class JWTAuthGuard implements CanActivate {
