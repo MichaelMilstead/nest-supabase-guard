@@ -1,19 +1,22 @@
 {
   "name": "nest-supabase-guard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Auth guard for NestJS using supabase",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "milst",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "@types/node": "^20.11.14",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.1",
-    "@supabase/supabase-js": "^2.39.3"
+    "@supabase/supabase-js": "^2.39.3",
+    "express": "^4.18.2"
   }
 }
