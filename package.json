@@ -1,13 +1,27 @@
 {
   "name": "nest-supabase-guard",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Auth guard for NestJS using supabase",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "milst",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MichaelMilstead/nest-supabase-guard"
+  },
+  "bugs": {
+    "url": "https://github.com/MichaelMilstead/nest-supabase-guard/issues"
+  },
+  "keywords": [
+    "nestjs",
+    "supabase",
+    "auth",
+    "authentication",
+    "guard"
+  ],
+  "author": "Michael Milstead",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.21",
