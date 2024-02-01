@@ -9,9 +9,11 @@
   "author": "milst",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.11.14",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@nestjs/common": "^10.3.1"
+    "@nestjs/common": "^10.3.1",
+    "@supabase/supabase-js": "^2.39.3"
   }
 }
