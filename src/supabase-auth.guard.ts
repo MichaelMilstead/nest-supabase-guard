@@ -64,10 +64,10 @@ export class SupabaseAuthGuard implements CanActivate {
     return type === "Bearer" && token != "undefined" ? token : undefined;
   }
 
-  async getUserFromJWT(token: string): Promise<User> {
+  async getUserFromJWT(token: string): Promise<User | undefined> {
     const response = await this.supabaseClient.auth.getUser(token);
     if (!response.data.user) {
-      throw new Error("User not found in Supabase for the given token");
+      return undefined;
     }
     return response.data.user;
   }

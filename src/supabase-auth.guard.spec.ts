@@ -1,4 +1,4 @@
-import { ExecutionContext } from "@nestjs/common";
+import { ExecutionContext, UnauthorizedException } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { SupabaseAuthGuard } from "./supabase-auth.guard";
 
@@ -55,6 +55,43 @@ describe("SupabaseAuthGuard", () => {
       await guard.canActivate(mockExecutionContext);
 
       expect(mockRequest.authUser).toEqual(expectedUser);
+    });
+  });
+
+  describe("authenticateRequest", () => {
+    it("should return a user for a valid token", async () => {
+      const validToken = "valid-token";
+      const expectedUser = { id: "test-id", email: "test-email" };
+      mockRequest.headers.authorization = `Bearer ${validToken}`;
+      (mockSupabaseClient.auth.getUser as jest.Mock).mockResolvedValueOnce({
+        data: { user: expectedUser },
+        error: null,
+      });
+
+      const user = await guard.authenticateRequest(mockRequest);
+
+      expect(user).toEqual(expectedUser);
+    });
+
+    it("should throw UnauthorizedException if no token provided", async () => {
+      mockRequest.headers.authorization = "";
+
+      await expect(guard.authenticateRequest(mockRequest)).rejects.toThrow(
+        UnauthorizedException
+      );
+    });
+
+    it("should throw UnauthorizedException for an invalid token", async () => {
+      const invalidToken = "invalid-token";
+      mockRequest.headers.authorization = `Bearer ${invalidToken}`;
+      (mockSupabaseClient.auth.getUser as jest.Mock).mockResolvedValueOnce({
+        data: { user: null },
+        error: { message: "Invalid token" },
+      });
+
+      await expect(guard.authenticateRequest(mockRequest)).rejects.toThrow(
+        UnauthorizedException
+      );
     });
   });
 
