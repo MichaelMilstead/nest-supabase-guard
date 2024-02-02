@@ -1,3 +1,3 @@
 import { customSupabaseClientProvider } from "./client-injection-helper";
-import { JWTAuthGuard } from "./jwt-auth.guard";
-export { JWTAuthGuard, customSupabaseClientProvider };
+import { SupabaseAuthGuard } from "./supabase-auth.guard";
+export { SupabaseAuthGuard as JWTAuthGuard, customSupabaseClientProvider };

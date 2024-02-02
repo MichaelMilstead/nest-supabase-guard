@@ -1,4 +1,4 @@
-Auth guard for NestJS using supabase. When applied to a route, checks that an auth bearer JWT is in the request headers, checks that it was made by your Supabase instance, and adds the decoded Supabase User object to the request for further actions.
+Authentication Guard for NestJS using supabase. When applied to a route, checks that an auth bearer JWT is in the request headers, checks that the token was created by your Supabase instance, and adds the decoded Supabase User object to the request for further actions.
 
 ## Installation
 
@@ -13,13 +13,13 @@ Import and use the Guard like you would any other.
 On individual routes:
 
 ```typescript
-import { JWTAuthGuard } from "nest-supabase-guard";
+import { SupabaseAuthGuard } from "nest-supabase-guard";
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @UseGuards(JWTAuthGuard)
+  @UseGuards(SupabaseAuthGuard)
   @Get()
   getHello(): string {
     return this.appService.getHello();

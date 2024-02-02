@@ -11,9 +11,9 @@ import { SupabaseClient, User, createClient } from "@supabase/supabase-js";
 import { Request } from "express";
 
 @Injectable()
-export class JWTAuthGuard implements CanActivate {
+export class SupabaseAuthGuard implements CanActivate {
   supabaseClient;
-  private readonly logger = new Logger(JWTAuthGuard.name);
+  private readonly logger = new Logger(SupabaseAuthGuard.name);
 
   constructor(@Optional() @Inject("SUPABASE_CLIENT") client?: SupabaseClient) {
     this.supabaseClient = client || this.initializeSupabaseClient();
