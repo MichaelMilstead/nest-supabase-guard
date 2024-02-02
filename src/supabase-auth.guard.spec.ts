@@ -95,6 +95,42 @@ describe("SupabaseAuthGuard", () => {
     });
   });
 
+  describe("extractTokenFromHeader", () => {
+    it("should extract token from bearer authorization header", () => {
+      const validToken = "valid-token";
+      mockRequest.headers.authorization = `Bearer ${validToken}`;
+
+      const token = guard.extractTokenFromHeader(mockRequest);
+
+      expect(token).toBe(validToken);
+    });
+
+    it("should return undefined if authorization type is not Bearer", () => {
+      const token = "some-token";
+      mockRequest.headers.authorization = `Basic ${token}`;
+
+      const extractedToken = guard.extractTokenFromHeader(mockRequest);
+
+      expect(extractedToken).toBeUndefined();
+    });
+
+    it("should return undefined if token is 'undefined'", () => {
+      mockRequest.headers.authorization = "Bearer undefined";
+
+      const extractedToken = guard.extractTokenFromHeader(mockRequest);
+
+      expect(extractedToken).toBeUndefined();
+    });
+
+    it("should return undefined if no authorization header is present", () => {
+      delete mockRequest.headers.authorization;
+
+      const extractedToken = guard.extractTokenFromHeader(mockRequest);
+
+      expect(extractedToken).toBeUndefined();
+    });
+  });
+
   describe("getUserFromJWT", () => {
     it("should return a user for a valid JWT", async () => {
       const validToken = "valid-token";
