@@ -27,6 +27,30 @@ export class AppController {
 }
 ```
 
+The Guard will take the resulting Supabase User of a successfully authenticated request and add it to the request object, as `request.authUser`, for later use.
+
+## Prerequisites
+
+1. The package expects you to have these environment variables set:
+
+```
+SUPABASE_URL=yourSupabaseUrl
+SUPABASE_ANON_KEY=yourSupabaseAnonKey
+```
+
+2.  Routes protected by this guard should expect the request to have an authentication header with a bearer token, where the bearer token is the supabase-generated token for the requesting user.
+
+    For example, your frontend might make a request that looks something like:
+
+    ```typescript
+    const session = await supabase.auth.getSession();
+    axios.get("https://yourbackend.com/your-endpoint", {
+      headers: {
+        Authorization: `Bearer ${session.data.session.access_token}`,
+      },
+    });
+    ```
+
 ## Optional Configuration
 
 ### Use your own Supabase client object
