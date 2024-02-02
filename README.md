@@ -1,4 +1,4 @@
-Authentication Guard for NestJS using supabase. When applied to a route, checks that an auth bearer JWT is in the request headers, checks that the token was created by your Supabase instance, and adds the decoded Supabase User object to the request for further actions.
+Authentication Guard for NestJS using Supabase. When applied to a route, checks that an auth bearer JWT is in the request headers, checks that the token was created by your Supabase instance, and adds the decoded Supabase User object to the request for further actions.
 
 ## Installation
 
