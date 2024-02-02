@@ -1,3 +1,4 @@
+import { ExecutionContext } from "@nestjs/common";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { SupabaseAuthGuard } from "./supabase-auth.guard";
 
@@ -14,6 +15,8 @@ jest.mock("@supabase/supabase-js", () => {
 describe("SupabaseAuthGuard", () => {
   let guard: SupabaseAuthGuard;
   let mockSupabaseClient: jest.Mocked<SupabaseClient>;
+  let mockExecutionContext: jest.Mocked<ExecutionContext>;
+  let mockRequest: any;
 
   beforeEach(() => {
     mockSupabaseClient = new SupabaseClient(
@@ -22,6 +25,37 @@ describe("SupabaseAuthGuard", () => {
     ) as jest.Mocked<SupabaseClient>;
 
     guard = new SupabaseAuthGuard(mockSupabaseClient);
+    mockRequest = {
+      headers: {},
+    } as unknown as any;
+    mockExecutionContext = {
+      switchToHttp: jest.fn().mockReturnValue({
+        getRequest: jest.fn().mockReturnValue(mockRequest),
+      }),
+    } as unknown as jest.Mocked<ExecutionContext>;
+  });
+
+  describe("canActivate", () => {
+    it("should return true if authentication is successful", async () => {
+      mockRequest.headers.authorization = "Bearer valid-token";
+      guard.authenticateRequest = jest
+        .fn()
+        .mockResolvedValueOnce({ user: "test-user" });
+
+      const result = await guard.canActivate(mockExecutionContext);
+
+      expect(result).toBeTruthy();
+    });
+
+    it("should attach token user to request if authentication is successful", async () => {
+      mockRequest.headers.authorization = "Bearer valid-token";
+      const expectedUser = { user: "test-user" };
+      guard.authenticateRequest = jest.fn().mockResolvedValueOnce(expectedUser);
+
+      await guard.canActivate(mockExecutionContext);
+
+      expect(mockRequest.authUser).toEqual(expectedUser);
+    });
   });
 
   describe("getUserFromJWT", () => {
